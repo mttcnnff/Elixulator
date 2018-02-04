@@ -3,7 +3,7 @@ defmodule Calc do
   def main() do
     result = IO.gets("> ")
     |> eval()
-    IO.puts("#{result}")
+    IO.puts("#{inspect(result)}")
     main()
   end
 

@@ -11,6 +11,7 @@ defmodule Parser do
   		:op -> handleOp(token, rest, op_stack, output_queue)
   		:leftparen -> handleLeftParen(token, rest, op_stack, output_queue)
   		:rightparen -> handleRightParen(token, rest, op_stack, output_queue)
+      :space -> handleSpace(token, rest, op_stack, output_queue)
   		:illegal -> raise "Error Parsing - Illegal Token -> #{token.value}" 
   		:eof -> parse(rest, op_stack, output_queue)
   	end
@@ -21,6 +22,10 @@ defmodule Parser do
   		raise "Error Parsing - Mismatched Parentheses"
   	end
     Enum.reverse(output_queue)++op_stack
+  end
+
+  defp handleSpace(_space_token, tokens, op_stack, output_queue) do
+    parse(tokens, op_stack, output_queue)
   end
 
   defp handleNumber(num_token, tokens, op_stack, output_queue) do

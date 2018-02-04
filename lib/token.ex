@@ -9,7 +9,8 @@ defmodule Token do
     rightparen: ")",
 		eof: "END",
 		illegal: "ILLEGAL",
-		fp: "FLOAT"
+		fp: "FLOAT",
+		space: "SPACE"
 	}
 
 	def create(type: type, value: value) do

@@ -1,19 +1,30 @@
 defmodule Lexer do
   
   def tokenize(line) do
-    characters = String.replace(line, [" ", "\n"], "") 
+    # characters = String.replace(line, [" ", "\n"], "") 
+    # |> String.split("", trim: true)
+    characters = String.replace(line, ["\n"], "") 
     |> String.split("", trim: true)
     tokenize(characters, [])
   end
 
   def tokenize(_chars = [], tokens) do
+    repeats = Enum.reduce_while(tokens, 0, fn(i, acc) -> 
+      if i.type != acc, 
+        do: {:cont, i.type}, 
+        else: {:halt, false} end)
+
+    if repeats == false do
+      raise "Error Lexing - Invalid Arithmetic Expression"
+    end
     Enum.reverse([Token.create(type: :eof, value: "") | tokens])
   end
 
-  def tokenize(chars = [ch | _rest], tokens) do
+  def tokenize(chars = [ch | rest], tokens) do
     cond do
       is_digit(ch) -> read_number(chars, tokens)
       is_decimal_point(ch) -> raise "Float Error - Floats must have digits leading decimal"
+      is_whitespace(ch) -> tokenize(rest, tokens)
       true -> read_next_thing(chars, tokens)
     end
   end
@@ -24,6 +35,10 @@ defmodule Lexer do
 
   def is_digit(char) do
     "0" <= char && char <= "9"
+  end
+
+  def is_whitespace(char) do
+    char == " "
   end
 
   def read_number(chars, tokens) do
