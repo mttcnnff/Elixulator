@@ -3,11 +3,7 @@
 ## Description:
 This is a simple calculator I wrote in Elixir for Web Development - CS4550.  
 I implemented a lexer, parser, and interpreter for the calculations.  I parsed the information into Reverse Polish Notation with the Shunting-Yard Algorithm and evaluated it with a simple stack interpreter in order to guaruntee order of operations.   
-It supports parentheses, floating-point operations, integer operations, and has four functions:
-1. \+
-2. \-
-3. \*
-4. \/
+It supports parentheses, floating-point operations, integer operations, and has four functions (\+, \-, \*, \/):
 
 ## References:
 Reverse Polish Notation - https://en.wikipedia.org/wiki/Reverse_Polish_notation  
