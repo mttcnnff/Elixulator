@@ -52,9 +52,4 @@ It supports parentheses and has four functions:
 </li></ul>
 
 
-        </div>
-      </div>
-    </div>
-
-
 
