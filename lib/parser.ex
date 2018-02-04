@@ -12,14 +12,14 @@ defmodule Parser do
   		:leftparen -> handleLeftParen(token, rest, op_stack, output_queue)
   		:rightparen -> handleRightParen(token, rest, op_stack, output_queue)
       :space -> handleSpace(token, rest, op_stack, output_queue)
-  		:illegal -> raise "Error Parsing - Illegal Token -> #{token.value}" 
+  		:illegal -> raise ParserError, message: "Illegal Token -> #{token.value}" 
   		:eof -> parse(rest, op_stack, output_queue)
   	end
   end
 
   defp parse(_tokens = [], op_stack, output_queue) do
-  	if Enum.any?(op_stack, fn(s) -> s == "(" || s == ")" end) do
-  		raise "Error Parsing - Mismatched Parentheses"
+  	if Enum.any?(op_stack, fn(s) -> s.value == "(" || s.value == ")" end) do
+  		raise ParserError, message: "Mismatched Parentheses"
   	end
     Enum.reverse(output_queue)++op_stack
   end
@@ -34,10 +34,10 @@ defmodule Parser do
   end
 
   @op_precedence %{
-    "+"=> 2, 
-    "-"=> 2, 
-    "/"=> 3, 
-    "*"=> 3
+    "+"=> 0, 
+    "-"=> 0, 
+    "/"=> 1, 
+    "*"=> 1
   }
 
   defp handleOp(op_token, tokens, op_stack, output_queue) do
@@ -55,11 +55,14 @@ defmodule Parser do
   defp handleRightParen(_rparen_token, tokens, op_stack, output_queue) do
   	{moved_ops, op_stack} = Enum.split_while(op_stack, fn(x) -> x.value != "(" end)
   	if Enum.empty?(op_stack) do
-  		raise "Error Parsing - Mismatched Parentheses"
+  		raise ParserError, message: "Mismatched Parentheses"
   	end
   	output_queue = Enum.reverse(moved_ops)++output_queue
   	[_poppedParen | op_stack] = op_stack
   	parse(tokens, op_stack, output_queue)
   end
+end
 
+defmodule ParserError do
+  defexception message: "There was a problem parsing."
 end

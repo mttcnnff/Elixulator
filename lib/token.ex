@@ -17,7 +17,11 @@ defmodule Token do
 		if Map.has_key?(@tokens, type) do
 			%__MODULE__{type: type, value: value}
 		else
-			raise "Invalid Token Type - #{inspect(type)}"
+			raise TokenError, message: "Invalid Token Type - #{inspect(type)}"
 		end
 	end
+end
+
+defmodule TokenError do
+	defexception message: "There was a problem with this a token."
 end
