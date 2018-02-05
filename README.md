@@ -1,4 +1,4 @@
-# Calc
+# Elixulator
 
 ## Description:
 This is a simple calculator I wrote in Elixir for Web Development - CS4550.  
